@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}FlowStock{% endblock %}</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"></head>
+<body>{% if current_user.is_authenticated %}
+<div class="layout"><aside class="sidebar"><a class="brand" href="{{ url_for('dashboard') }}">Flow<span>Stock</span></a><div class="side-label">WORKSPACE</div>
+<nav>{% for endpoint,label,ico in [('dashboard','Dashboard','▦'),('inventory','Inventory','▤'),('stock','Stock movements','↕'),('orders','Orders','▣'),('shipments','Shipments','⇢'),('suppliers','Suppliers','♙'),('reports','Reports','▥')] %}
+<a class="{% if request.endpoint==endpoint %}active{% endif %}" href="{{ url_for(endpoint) }}"><b>{{ ico }}</b>{{ label }}</a>{% endfor %}</nav>
+<div class="side-bottom">Integrated Logistics & Inventory<br>Management System<br><small>Academic project prototype</small></div></aside>
+<main class="main"><header class="topbar"><span>Operations / <b>{% block crumb %}Dashboard{% endblock %}</b></span><div class="profile"><span>{{ current_user.username }} · {{ current_user.role|title }}</span><a href="{{ url_for('logout') }}">Sign out</a></div></header>
+<div class="content">{% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}{% block content %}{% endblock %}<footer>FlowStock · Integrated Logistics & Inventory Management System</footer></div></main></div>
+{% else %}{% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}{% block authcontent %}{% endblock %}{% endif %}
+</body></html>
